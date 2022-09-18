@@ -11,11 +11,12 @@ public class load : MonoBehaviour
     public int table1 = 0;
     public int orders = 0;
     
+
     // Start is called before the first frame update
     void Start()
     {
         counter = 0;
-        Invoke("ShowOnScreen", 2);
+        Invoke("ShowOnScreen", 4);
     }
 
     void ShowOnScreen()
@@ -28,7 +29,7 @@ public class load : MonoBehaviour
 
         if (counter < num_customers)
         {
-            Invoke("ShowOnScreen", 2);
+            Invoke("ShowOnScreen", 5-counter);
         }
     }
 }

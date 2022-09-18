@@ -4,22 +4,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class customer_behavior : MonoBehaviour
 {
-    private bool attatched;
+    public bool orderfinished;
     private Vector3 moveDelta;
     private bool fin;
-    private float moveSpeed = 2.0f;
+    private float moveSpeed = 3.0f;
     public bool orderready;
     public bool orderreceived;
     private load parentComp;
     private int completed = 0;
     private int total;
+    private bool attatched;
 
     private void start()
     {
         attatched = false;
+        orderfinished = true;
         fin = false;
         orderready = false;
         orderreceived = false;
+        
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -28,7 +31,7 @@ public class customer_behavior : MonoBehaviour
         total = GameObject.Find("Customer GameObject").GetComponent<load>().num_customers;
         if (other.gameObject.tag == "Player" && fin == false && parentComp.num_attatched < 1)
         {
-            attatched=true;
+            attatched = true;
             fin = true;
             parentComp.num_attatched += 1;
         }
@@ -37,14 +40,14 @@ public class customer_behavior : MonoBehaviour
             attatched = false;
             parentComp.table0 += 1;
             parentComp.num_attatched = 0;
-            Invoke("set_order_ready", 2);
+            Invoke("set_order_ready", 3);
         }
         if (other.gameObject.tag == "Table1" && parentComp.table1 < 2)
         {
             attatched = false;
             parentComp.table1 += 1;
             parentComp.num_attatched = 0;
-            Invoke("set_order_ready", 2);
+            Invoke("set_order_ready", 3);
         }
 
         if (other.gameObject.tag == "Player" && fin == true && parentComp.num_attatched == 0 && orderready == true && orderreceived == false)
@@ -57,17 +60,21 @@ public class customer_behavior : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             GameObject child = player.transform.GetChild(i).gameObject;
-            if (other.gameObject.tag == "Player" && fin == true && parentComp.num_attatched == 0 && child.GetComponent<Renderer>().enabled == true)
+            if (other.gameObject.tag == "Player" && child.GetComponent<Renderer>().enabled == true)
             {
                 Debug.Log("disable sprite");
-                child.GetComponent<Renderer>().enabled = true;
+                child.GetComponent<Renderer>().enabled = false;
                 this.GetComponent<Renderer>().enabled = false;
+                this.GetComponent<BoxCollider2D>().enabled = false;
                 completed += 1;
                 this.GetComponent<Rigidbody2D>().isKinematic = true;
+                orderfinished = true;
+                parentComp.table0 -= 1;
+                parentComp.table1 -= 1;
             }
         }
 
-        if (completed == total)
+        if (completed == total-1)
         {
             Debug.Log(total);
             Debug.Log("hi");

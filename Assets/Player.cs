@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private Vector3 moveDelta;
     private RaycastHit2D hitx;
     private RaycastHit2D hity;
-    private float moveSpeed = 2.0f;
+    private float moveSpeed = 3.0f;
 
     private void Start()
     {
